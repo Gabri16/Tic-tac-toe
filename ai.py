@@ -21,8 +21,12 @@ class ai:
                     if matrix[row][column] == ' ':
 
                         # randomness generator, based on length of matrix
-                        # for matrices of bigger size there is a lower chance of fullfilling the condition below,
-                        # thus, the computer has chance to populate distant corner of the playing field
+                        # there is a lower chance of fullfilling the condition below for matrices of bigger size,
+                        # thus higher chance to populate distant corner of the playing field
                         if randint(0, len(matrix)) == 1:
                             turn = [row, column]
                             return turn
+
+    # TODO: prepare some more sophisticated algorithm for computer opponent
+    def play_hard(self, matrix):
+        return

@@ -2,8 +2,6 @@ from game import TicTacToe
 from ai import ai
 from helpers import the_winner_is, request_player_turn_coordinates, request_player_play_symbol
 
-SYMBOLS = ('O', 'X')
-
 if __name__ == "__main__":
 
     # assigning playing symbols

@@ -122,8 +122,11 @@ class TicTacToe():
                                 # check if full row in anti-diagonal exists
                                 while True:
                                     try:
-                                        if matrix[row + suceeding_symbols][column - suceeding_symbols] == symbol:
-                                            suceeding_symbols += 1
+                                        if column - suceeding_symbols != -1:
+                                            if matrix[row + suceeding_symbols][column - suceeding_symbols] == symbol:
+                                                suceeding_symbols += 1
+                                            else:
+                                                break
                                         else:
                                             break
                                     except IndexError:
@@ -135,7 +138,7 @@ class TicTacToe():
                                     suceeding_symbols = 1
 
         # in case of DRAW, when all fields where populated and no winner was found
-        if self.turn_counter > MATRIX_SIZE * MATRIX_SIZE:
+        if self.turn_counter == MATRIX_SIZE * MATRIX_SIZE:
             return 'DRAW'
 
         # when no full succession was found, the function returns None
