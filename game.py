@@ -33,6 +33,8 @@ class TicTacToe():
         column_labels = [f' {column} ' for column in range(0, len(matrix))]
         row_labels = [row for row in range(0, len(matrix))]
 
+        print('')
+
         # formatting and printing of column labels
         print('  ', end='')
         print(*column_labels)
@@ -52,6 +54,8 @@ class TicTacToe():
             # generates line separator of appropriate length after each row (except after the last row)
             if row != len(matrix) - 1:
                 print(f'  {"----" * (len(matrix) - 1)}---')
+
+        print('')
         return
 
     

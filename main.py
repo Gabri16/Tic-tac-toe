@@ -23,7 +23,7 @@ if __name__ == "__main__":
     while True:
 
         # player's turn
-        players_turn = request_player_turn_coordinates()
+        players_turn = request_player_turn_coordinates(game_brain.matrix)
 
         # populates playing field with player's symbol with requested coordinates
         game_brain.matrix[players_turn[0]][players_turn[1]] = player_symbol

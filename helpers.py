@@ -1,10 +1,10 @@
 def request_player_play_symbol():
-    player_symbol = input('Select symbol: O or X ').upper()
+    player_symbol = input('Select symbol (O or X): ').upper()
     while player_symbol != 'O' and player_symbol != 'X':
         player_symbol = input('Invalid char. Select player_symbol: O or X').upper()
     return player_symbol
 
-def request_player_turn_coordinates():
+def request_player_turn_coordinates(matrix):
     print("Your turn")
 
     # a lot of screaming until correct input is entered
@@ -13,15 +13,15 @@ def request_player_turn_coordinates():
             player_turn_column = int(input('Select column: '))
             player_turn_row = int(input('Select row: '))
 
-            if player_turn_column not in range(0, len(game_brain.matrix)) \
-                    or player_turn_row not in range(0, len(game_brain.matrix)):
+            if player_turn_column not in range(0, len(matrix)) \
+                    or player_turn_row not in range(0, len(matrix)):
                 print('Index out of range, select position within playing field')
-            elif game_brain.matrix[player_turn_row][player_turn_column] != ' ':
+            elif matrix[player_turn_row][player_turn_column] != ' ':
                 print('Selected position was already populated')
             else:
                 break
         except ValueError:
-            print(f'Invalid input, select number between 0 - {len(game_brain.matrix)}')
+            print(f'Invalid input, select number between 0 - {len(matrix)}')
     return player_turn_row, player_turn_column
 
 
