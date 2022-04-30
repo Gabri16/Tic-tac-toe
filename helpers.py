@@ -5,7 +5,7 @@ def request_player_play_symbol():
     return player_symbol
 
 def request_player_turn_coordinates(matrix):
-    print("Your turn")
+    print("YOUR TURN")
 
     # a lot of screaming until correct input is entered
     while True:
@@ -26,7 +26,13 @@ def request_player_turn_coordinates(matrix):
 
 
 def the_winner_is(result):
+    # ascii art from https://fsymbols.com/text-art/
     if result == 'DRAW':
-        print('The game ended in draw')
+        print('█▀▄ █▀█ ▄▀█ █░█░█\n'
+              '█▄▀ █▀▄ █▀█ ▀▄▀▄▀')
+    elif result == 'O':
+        print("▀█▀ █░█ █▀▀   █░█░█ █ █▄░█ █▄░█ █▀▀ █▀█   █ █▀   █▀█\n"
+              "░█░ █▀█ ██▄   ▀▄▀▄▀ █ █░▀█ █░▀█ ██▄ █▀▄   █ ▄█   █▄█")
     else:
-        print(f'{result} is the winner')
+        print("▀█▀ █░█ █▀▀   █░█░█ █ █▄░█ █▄░█ █▀▀ █▀█   █ █▀   ▀▄▀\n"
+              "░█░ █▀█ ██▄   ▀▄▀▄▀ █ █░▀█ █░▀█ ██▄ █▀▄   █ ▄█   █░█")

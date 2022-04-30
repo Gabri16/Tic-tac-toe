@@ -21,7 +21,6 @@ if __name__ == "__main__":
 
     # game runs indefinitely in loop, until winner is found - then the loop is broken
     while True:
-
         # player's turn
         players_turn = request_player_turn_coordinates(game_brain.matrix)
 
@@ -35,7 +34,7 @@ if __name__ == "__main__":
             break
 
         # opponent's turn
-        print("Opponent's turn")
+        print("OPPONENT'S TURN")
         opponents_turn = opponent.turn(game_brain.matrix)
         game_brain.matrix[opponents_turn[0]][opponents_turn[1]] = opponent_symbol
         game_brain.draw_field(game_brain.matrix)

@@ -63,8 +63,6 @@ class TicTacToe():
     def check_winner(self, matrix, symbol):
 
         self.turn_counter += 1
-        if self.turn_counter >= MATRIX_SIZE * MATRIX_SIZE:
-            return 'DRAW'
 
         # counter of suceeding symbols; game ends when matrix length number of succeeding symbols is found
         suceeding_symbols = 1
@@ -135,6 +133,10 @@ class TicTacToe():
                                     return symbol
                                 else:
                                     suceeding_symbols = 1
+
+        # in case of DRAW, when all fields where populated and no winner was found
+        if self.turn_counter > MATRIX_SIZE * MATRIX_SIZE:
+            return 'DRAW'
 
         # when no full succession was found, the function returns None
         return None
