@@ -144,3 +144,4 @@ class ai:
         # is able to complete three
         # needs to block opponent - find a better way how to detect almost complete line
         # populate random blank space
+        pass

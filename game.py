@@ -58,84 +58,49 @@ class TicTacToe():
         print('')
         return
 
-    
     # mechanism to check winning line of matrix length
     def check_winner(self, matrix, symbol):
 
+        # turn counter to detected draw after all position populated
         self.turn_counter += 1
 
-        # counter of suceeding symbols; game ends when matrix length number of succeeding symbols is found
-        suceeding_symbols = 1
+        # checking if all positions in a row are populated by the symbol
+        for row in range(MATRIX_SIZE):
+            winner = symbol
+            for col in range(MATRIX_SIZE):
+                if matrix[row][col] != symbol:
+                    winner = None
+                    break
+            if winner:
+                return winner
 
-        # this function checks all detected symbols in all directions
-        # finds an occurence of 'symbol' in the matrix and starts checking
-        for row in range(0, len(matrix)):
-            for column in range(0, len(matrix[row])):
-                if matrix[row][column] == symbol:
+        # checking if all positions in a col are populated by the symbol
+        for col in range(MATRIX_SIZE):
+            winner = symbol
+            for row in range(MATRIX_SIZE):
+                if matrix[row][col] != symbol:
+                    winner = None
+                    break
+            if winner:
+                return winner
 
-                    # check if full row exists
-                    while True:
-                        try:
-                            if matrix[row][column + suceeding_symbols] == symbol:
-                                suceeding_symbols += 1
-                            else:
-                                break
-                        except IndexError:
-                            break
+        # checking if all positions in diagonal are populated by the symbol
+        for row_col in range(MATRIX_SIZE):
+            winner = symbol
+            if matrix[row_col][row_col] != symbol:
+                winner = None
+                break
+        if winner:
+            return winner
 
-                    if suceeding_symbols == len(matrix):
-                        # when winning succesion was detected, the function returns winning symbol
-                        return symbol
-                    else:
-                        suceeding_symbols = 1
-
-                        # check if full column exists
-                        while True:
-                            try:
-                                if matrix[row + suceeding_symbols][column] == symbol:
-                                    suceeding_symbols += 1
-                                else:
-                                    break
-                            except IndexError:
-                                break
-
-                        if suceeding_symbols == len(matrix):
-                            return symbol
-                        else:
-                            suceeding_symbols = 1
-
-                            # check if full row in diagonal exists
-                            while True:
-                                try:
-                                    if matrix[row + suceeding_symbols][column + suceeding_symbols] == symbol:
-                                        suceeding_symbols += 1
-                                    else:
-                                        break
-                                except IndexError:
-                                    break
-
-                            if suceeding_symbols == len(matrix):
-                                return symbol
-                            else:
-                                suceeding_symbols = 1
-
-                                # check if full row in anti-diagonal exists
-                                while True:
-                                    try:
-                                        if column - suceeding_symbols != -1:
-                                            if matrix[row + suceeding_symbols][column - suceeding_symbols] == symbol:
-                                                suceeding_symbols += 1
-                                            else:
-                                                break
-                                        else:
-                                            break
-                                    except IndexError:
-                                        break
-
-                                if suceeding_symbols == len(matrix):
-                                    return symbol
-                                else:
-                                    suceeding_symbols = 1
+        # checking if all positions in antidiagonal are populated by the symbol
+        for row_col in range(MATRIX_SIZE):
+            winner = symbol
+            if matrix[row_col][MATRIX_SIZE - 1 - row_col] != symbol:
+                winner = None
+                break
+        if winner:
+            return winner
 
         # in case of DRAW, when all fields where populated and no winner was found
         if self.turn_counter == MATRIX_SIZE * MATRIX_SIZE:
