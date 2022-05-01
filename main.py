@@ -15,7 +15,7 @@ if __name__ == "__main__":
     game_brain = TicTacToe()
 
     # creates object 'opponent' with ai algorithms
-    opponent = ai(player_symbol, opponent_symbol, 'medium') # select difficulty: 'easy', 'medium', 'hard'
+    opponent = ai(player_symbol, opponent_symbol, 'medium') # select difficulty: 'easy', 'medium'
 
     # game runs indefinitely in loop, until winner is found - then the loop is broken
     while True:

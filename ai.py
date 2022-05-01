@@ -138,3 +138,9 @@ class ai:
                         if randint(0, len(matrix)) == 1:
                             turn = (row, column)
                             return turn
+
+    #TODO: create much smarter algo
+    def play_hard(self):
+        # is able to complete three
+        # needs to block opponent - find a better way how to detect almost complete line
+        # populate random blank space
