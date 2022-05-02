@@ -4,9 +4,8 @@ def request_player_play_symbol():
         player_symbol = input('Invalid char. Select player_symbol: O or X').upper()
     return player_symbol
 
-def request_player_turn_coordinates(matrix):
-    print("YOUR TURN")
 
+def request_player_turn_coordinates(matrix):
     # a lot of screaming until correct input is entered
     while True:
         try:

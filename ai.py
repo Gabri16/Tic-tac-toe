@@ -11,19 +11,47 @@ class ai:
             return self.play_easy(matrix)
         if self.difficulty == 'medium':
             return self.play_medium(self.player_symbol, matrix)
+        if self.difficulty == 'hard':
+            return self.play_hard(self.player_symbol, self.symbol, matrix)
 
-    # primitive algorithm based on random placement of symbols into blank spots in the play field
+
+    ### GAME DIFFICULTIES ###
     def play_easy(self, matrix):
+        return self.populate_random_blank(matrix)
+
+    # this algorithm initially tries to block player's moves, then places symbol randomly to blank space
+    def play_medium(self, symbol, matrix):
+
+        if self.blocking_strategy(symbol, matrix):
+            return self.blocking_strategy(symbol, matrix)
+        else:
+            return self.populate_random_blank(matrix)
+
+    # this algorithm initially tries to win and if not possible, then blocks player
+    # if there is no danger of other player winning, randomly places symbol to blank space
+    def play_hard(self, player_symbol, ai_symbol, matrix):
+
+        try_win = self.try_win(ai_symbol, matrix)
+        if try_win:
+            return try_win
+
+        blocking_strategy = self.blocking_strategy(player_symbol, matrix)
+        if blocking_strategy:
+            return blocking_strategy
+        else:
+            return self.populate_random_blank(matrix)
+
+
+    ### PLAYING STRATEGIES ###
+    def populate_random_blank(self, matrix):
         turn = ()
 
         # while loop until random decision is valid
         while not turn:
+            # search for blank spot in the playing field
             for row in range(0, len(matrix)):
                 for column in range(0, len(matrix[row])):
-
-                    # search for blank spot in the playing field
                     if matrix[row][column] == ' ':
-
                         # randomness generator, based on length of matrix
                         # there is a lower chance of fullfilling the condition below for matrices of bigger size,
                         # thus higher chance to populate distant corner of the playing field
@@ -31,117 +59,114 @@ class ai:
                             turn = (row, column)
                             return turn
 
-
-    # this algorithm regards player's turn (symbol) and tries to block him before full succession line is created
-    # if no blocking was deemed necessary, computers marks random spot
-    # honestly, does not work very well as it regards creation of lines only in one direction
-    def play_medium(self, symbol, matrix):
+    def blocking_strategy(self, symbol, matrix):
         turn = ()
 
-        # finds an occurence of 'symbol' in the matrix and starts checking
-        for row in range(0, len(matrix)):
-            for column in range(0, len(matrix[row])):
-                if matrix[row][column] == symbol:
-                    suceeding_symbols = 1
-                    # check if almost full row exists, if so, block it
-                    while True:
-                        try:
-                            if matrix[row][column + suceeding_symbols] == symbol:
-                                suceeding_symbols += 1
-                            else:
-                                break
-                        except IndexError:
-                            break
+        # checks rows for player's moves
+        for row in range(len(matrix)):
+            player_populated_fields = 0
+            for col in range(len(matrix)):
+                if matrix[row][col] == symbol:
+                    player_populated_fields += 1
+            # if row is almost fully populated (except for one field), find 'blank' space and populate it
+            if player_populated_fields == len(matrix) - 1:
+                for col in range(len(matrix)):
+                    if matrix[row][col] == ' ':
+                        turn = (row, col)
+                        return turn
 
-                    if suceeding_symbols == len(matrix) - 1:
-                        print('i see two in row')
-                        try:
-                            if matrix[row][column + suceeding_symbols] == ' ':
-                                turn = (row, column + suceeding_symbols)
-                                return turn
-                        except IndexError: # blunt way how to avoid IndexErrors
-                            pass
-                    else:
-                        suceeding_symbols = 1
+        # checks cols for player's moves
+        for col in range(len(matrix)):
+            player_populated_fields = 0
+            for row in range(len(matrix)):
+                if matrix[row][col] == symbol:
+                    player_populated_fields += 1
+            # if col is almost fully populated (except for one field), find 'blank' space and populate it
+            if player_populated_fields == len(matrix) - 1:
+                for row in range(len(matrix)):
+                    if matrix[row][col] == ' ':
+                        turn = (row, col)
+                        return turn
 
-                        # check if almost full column exists
-                        while True:
-                            try:
-                                if matrix[row + suceeding_symbols][column] == symbol:
-                                    suceeding_symbols += 1
-                                else:
-                                    break
-                            except IndexError:
-                                break
+        # checks diagonal for player's moves
+        player_populated_fields = 0
+        for row_col in range(len(matrix)):
+            if matrix[row_col][row_col] == symbol:
+                player_populated_fields += 1
+        # if diagonal is almost fully populated (except for one field), find 'blank' space and populate it
+        if player_populated_fields == len(matrix) - 1:
+            for row_col in range(len(matrix)):
+                if matrix[row_col][row_col] == ' ':
+                    turn = (row_col, row_col)
+                    return turn
 
-                        if suceeding_symbols == len(matrix) - 1:
-                            print('i see two in col')
-                            try:
-                                if matrix[row + suceeding_symbols][column] == ' ':
-                                    turn = (row + suceeding_symbols, column)
-                                    return turn
-                            except IndexError:
-                                pass
-                        else:
-                            suceeding_symbols = 1
+        # checks antidiagonal for player's moves
+        player_populated_fields = 0
+        for row_col in range(len(matrix)):
+            if matrix[row_col][len(matrix) - 1 - row_col] == symbol:
+                player_populated_fields += 1
+        # if antidiagonal is almost fully populated (except for one field), find 'blank' space and populate it
+        if player_populated_fields == len(matrix) - 1:
+            for row_col in range(len(matrix)):
+                if matrix[row_col][len(matrix) - 1 - row_col] == ' ':
+                    turn = (row_col, len(matrix) - 1 - row_col)
+                    return turn
 
-                            # check if almost full row in diagonal exists
-                            while True:
-                                try:
-                                    if matrix[row + suceeding_symbols][column + suceeding_symbols] == symbol:
-                                        suceeding_symbols += 1
-                                    else:
-                                        break
-                                except IndexError:
-                                    break
+        # if nothing to block was found, return None
+        return None
 
-                            if suceeding_symbols == len(matrix) - 1:
-                                print('i see two in diagonal')
-                                try:
-                                    if matrix[row + suceeding_symbols][column + suceeding_symbols] == ' ':
-                                        turn = (row + suceeding_symbols, column + suceeding_symbols)
-                                        return turn
-                                except IndexError:
-                                    pass
-                            else:
-                                suceeding_symbols = 1
+    def try_win(self, ai_symbol, matrix):
+        turn = ()
 
-                                # check if almost full row in anti-diagonal exists
-                                while True:
-                                    try:
-                                        if column - suceeding_symbols != -1:
-                                            if matrix[row + suceeding_symbols][column - suceeding_symbols] == symbol:
-                                                suceeding_symbols += 1
-                                            else:
-                                                break
-                                        else:
-                                            break
-                                    except IndexError:
-                                        break
+        # checks rows for ai moves
+        for row in range(len(matrix)):
+            ai_populated_fields = 0
+            for col in range(len(matrix)):
+                if matrix[row][col] == ai_symbol:
+                    ai_populated_fields += 1
+            # if row contains almost all ai symbols, find 'blank' space and populate it
+            if ai_populated_fields == len(matrix) - 1:
+                for col in range(len(matrix)):
+                    if matrix[row][col] == ' ':
+                        turn = (row, col)
+                        return turn
 
-                                if suceeding_symbols == len(matrix) - 1:
-                                    print('i see two in antidiagonal')
-                                    try:
-                                        if matrix[row + suceeding_symbols][column - suceeding_symbols] == ' ':
-                                            turn = (row + suceeding_symbols, column - suceeding_symbols)
-                                            return turn
-                                    except IndexError:
-                                        pass
-                                else:
-                                    suceeding_symbols = 1
+        # checks cols for ai moves
+        for col in range(len(matrix)):
+            ai_populated_fields = 0
+            for row in range(len(matrix)):
+                if matrix[row][col] == ai_symbol:
+                    ai_populated_fields += 1
+            # if col is almost fully populated (except for one field), find 'blank' space and populate it
+            if ai_populated_fields == len(matrix) - 1:
+                for row in range(len(matrix)):
+                    if matrix[row][col] == ' ':
+                        turn = (row, col)
+                        return turn
 
-        # algo from easy difficulty - puts symbol into blank space if no blocking was neccessary
-        while not turn:
-            for row in range(0, len(matrix)):
-                for column in range(0, len(matrix[row])):
-                    if matrix[row][column] == ' ':
-                        if randint(0, len(matrix)) == 1:
-                            turn = (row, column)
-                            return turn
+        # checks diagonal for ai moves
+        ai_populated_fields = 0
+        for row_col in range(len(matrix)):
+            if matrix[row_col][row_col] == ai_symbol:
+                ai_populated_fields += 1
+        # if diagonal is almost fully populated (except for one field), find 'blank' space and populate it
+        if ai_populated_fields == len(matrix) - 1:
+            for row_col in range(len(matrix)):
+                if matrix[row_col][row_col] == ' ':
+                    turn = (row_col, row_col)
+                    return turn
 
-    #TODO: create much smarter algo
-    def play_hard(self):
-        # is able to complete three
-        # needs to block opponent - find a better way how to detect almost complete line
-        # populate random blank space
-        pass
+        # checks antidiagonal for player's moves
+        ai_populated_fields = 0
+        for row_col in range(len(matrix)):
+            if matrix[row_col][len(matrix) - 1 - row_col] == ai_symbol:
+                ai_populated_fields += 1
+        # if antidiagonal is almost fully populated (except for one field), find 'blank' space and populate it
+        if ai_populated_fields == len(matrix) - 1:
+            for row_col in range(len(matrix)):
+                if matrix[row_col][len(matrix) - 1 - row_col] == ' ':
+                    turn = (row_col, len(matrix) - 1 - row_col)
+                    return turn
+
+        # if nothing to win was found, return None
+        return None
